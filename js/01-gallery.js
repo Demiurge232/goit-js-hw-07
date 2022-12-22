@@ -1,6 +1,9 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 const divGallery = document.querySelector('.gallery');
+
+let instance;
+
 const markup = galleryItems
   .map(
     ({ description, original, preview }) =>
@@ -14,8 +17,15 @@ const onDivGalleryClick = evt => {
   if (evt.target.nodeName !== 'IMG') {
     return;
   }
-  const instance = basicLightbox.create(`<img src="${evt.target.getAttribute('data-source')}">`);
+  window.addEventListener('keydown', onEscKeyPress);
+  instance = basicLightbox.create(`<img src="${evt.target.getAttribute('data-source')}">`);
   instance.show();
 };
 
+function onEscKeyPress(evt) {
+  if (evt.code === 'Escape') {
+    instance.close();
+    window.removeEventListener('keydown', onEscKeyPress);
+  }
+}
 divGallery.addEventListener('click', onDivGalleryClick);
